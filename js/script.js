@@ -1,4 +1,4 @@
-//IIFE for GAMEBOARD
+//IIFE for GAMEBOARD module
 const GAMEBOARD = (function(){
     //Private state goes here
     const gameBoard = Array(9).fill('') // Initializing a 3x3 board
@@ -20,6 +20,9 @@ const GAMEBOARD = (function(){
                 return false;
             }
         },
+        resetBoard: function () {
+             gameBoard.fill('')
+        },
 
     };
 })();
@@ -34,8 +37,8 @@ function createPlayer (name,marker){
 //IIFE for 'GAME_CONTROLLER' module
 const GAME_CONTROLLER = (function () {
     //Private state goes here
-    const playerX = createPlayer('Zakk', 'X');
-    const playerO = createPlayer('Myles', 'O');
+    let playerX; //= createPlayer('Zakk', 'X');
+    let playerO; //= createPlayer('Myles', 'O');
     let currentPlayer = playerX;
     let gameStatus = true;
     const WIN_COMBINATIONS = [
@@ -99,14 +102,30 @@ const GAME_CONTROLLER = (function () {
                 }
             };
         },
+        initializeGame: function (nameX,nameO) {
+           playerX = createPlayer(nameX, 'X');
+           playerO = createPlayer(nameO, 'O');
+           currentPlayer = playerX;
+           DISPLAY_CONTROLLER.updateDisplay();
+        },
+        restartGame: function () {
+          GAMEBOARD.resetBoard();
+          currentPlayer = playerX;
+          gameStatus = true;
+          DISPLAY_CONTROLLER.updateDisplay();  
+        },
     };
 })();
 
-//IIFE for 'DISPLAY_CONTROLLER'
+//IIFE for 'DISPLAY_CONTROLLER' module
 const DISPLAY_CONTROLLER = (function () {
     //Private state goes here
     let boardContainer = document.querySelector('.gameboard-container');
-
+    let restartBtn = document.querySelector('.restart-button');
+    let dialog = document.querySelector('dialog');
+    let startBtn = document.querySelector('#start-btn');
+    let PlayerX = document.querySelector('#PlayerX')
+    let PlayerO = document.querySelector('#PlayerO')
     //Private Functions below
     function handleClick(e) {
         let index = e.target.dataset.index;
@@ -118,6 +137,25 @@ const DISPLAY_CONTROLLER = (function () {
     }
     setupEventListeners();
 
+    function setUpRestartButton() {
+        restartBtn.addEventListener('click',GAME_CONTROLLER.restartGame);
+    }
+    setUpRestartButton();
+
+    function setUpStartButton() {
+        startBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const nameX = PlayerX.value;
+            const nameO = PlayerO.value;
+
+            GAME_CONTROLLER.initializeGame(nameX,nameO);
+
+            dialog.close();
+        });
+    }
+    setUpStartButton();
+
     //The function MUST return an object {}
     return{
         updateDisplay: function () {
@@ -128,6 +166,7 @@ const DISPLAY_CONTROLLER = (function () {
             currentBoard.forEach((marker, index) => {
                 const cellElement = document.createElement('div');
                 cellElement.setAttribute('data-index', index)
+                cellElement.classList.add('cell');
 
                 cellElement.innerHTML = `
                     <div>${marker}</div>
