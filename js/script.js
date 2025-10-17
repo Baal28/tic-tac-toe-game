@@ -44,7 +44,7 @@ const GAME_CONTROLLER = (function () {
     const WIN_COMBINATIONS = [
         //Rows  //Columns //Diagonal
         [0,1,2], [0,3,6], [0,4,8],
-        [3,4,5], [1,4,7], [2,4,6]
+        [3,4,5], [1,4,7], [2,4,6],
         [6,7,8], [2,5,8],     
     ]; 
     // Private Functions
@@ -61,6 +61,15 @@ const GAME_CONTROLLER = (function () {
         }
         return false;
     }
+
+     function switchTurn () {
+            if (currentPlayer.marker === 'X') {
+                currentPlayer = playerO;
+            } else {
+                currentPlayer = playerX;
+            }  
+            DISPLAY_CONTROLLER.updateTurnDisplay();
+        }
     // The function Must return an object
     return{
         //Public methods goes here
@@ -71,13 +80,14 @@ const GAME_CONTROLLER = (function () {
                 return playerO
             }
         },
-        switchTurn: function () {
-            if (currentPlayer === playerX) {
+        /*switchTurn: function () {
+            if (currentPlayer.marker === 'X') {
                 currentPlayer = playerO;
             } else {
                 currentPlayer = playerX;
             }  
-        },
+            DISPLAY_CONTROLLER.updateTurnDisplay();
+        },*/
         playerChoice: function(index){
             if (gameStatus === false) {
                 return;
@@ -98,7 +108,7 @@ const GAME_CONTROLLER = (function () {
                     gameStatus = false;
                     return DISPLAY_CONTROLLER.displayMessage(`Game Over: Draw!`)
                 } else {
-                    GAME_CONTROLLER.switchTurn();
+                    switchTurn();
                 }
             };
         },
@@ -107,6 +117,7 @@ const GAME_CONTROLLER = (function () {
            playerO = createPlayer(nameO, 'O');
            currentPlayer = playerX;
            DISPLAY_CONTROLLER.updateDisplay();
+           DISPLAY_CONTROLLER.updateTurnDisplay();
         },
         restartGame: function () {
           GAMEBOARD.resetBoard();
@@ -126,6 +137,7 @@ const DISPLAY_CONTROLLER = (function () {
     let startBtn = document.querySelector('#start-btn');
     let PlayerX = document.querySelector('#PlayerX')
     let PlayerO = document.querySelector('#PlayerO')
+    let winnerDisplayElement = document.querySelector('.winner');
     //Private Functions below
     function handleClick(e) {
         let index = e.target.dataset.index;
@@ -169,14 +181,23 @@ const DISPLAY_CONTROLLER = (function () {
                 cellElement.classList.add('cell');
 
                 cellElement.innerHTML = `
-                    <div>${marker}</div>
+                    <div class="${marker === 'X' ? 'x-marker' : 'o-marker'}">${marker}</div>
                 `;
 
                 boardContainer.appendChild(cellElement);
             });
         },
         displayMessage: function (message){
-            alert(message);
+            const displayTurn = document.querySelector('.turn-display');
+            winnerDisplayElement.textContent = message;
+            displayTurn.textContent = ''; 
+        },
+        updateTurnDisplay: function () {
+            const currentPlayer = GAME_CONTROLLER.getTurn();
+            const displayTurn = document.querySelector('.turn-display');
+
+            displayTurn.textContent = `It's ${currentPlayer.name} turn`;
         }
+
     }
 })();

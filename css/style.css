@@ -24,6 +24,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 20px;
   height: 100vh;
 }
 
@@ -62,7 +63,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .cell{
-    border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
 
+}
+
+.cell > div {
+  font-size: 3em;
+}
+
+.x-marker{
+  color: #90B6BF;
+}
+
+.o-marker{
+  color: #D29AA0;
 }
 
