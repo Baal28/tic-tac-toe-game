@@ -120,10 +120,15 @@ const GAME_CONTROLLER = (function () {
            DISPLAY_CONTROLLER.updateTurnDisplay();
         },
         restartGame: function () {
+          const winner = document.querySelector('.winner');
+          const displayTurn = document.querySelector('.turn-display');  
           GAMEBOARD.resetBoard();
           currentPlayer = playerX;
           gameStatus = true;
+          winner.textContent = '';
+          displayTurn.textContent = '';
           DISPLAY_CONTROLLER.updateDisplay();  
+          DISPLAY_CONTROLLER.updateTurnDisplay();
         },
     };
 })();
@@ -155,6 +160,7 @@ const DISPLAY_CONTROLLER = (function () {
     setUpRestartButton();
 
     function setUpStartButton() {
+        dialog.showModal();
         startBtn.addEventListener('click', (e) => {
             e.preventDefault();
 

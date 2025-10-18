@@ -26,6 +26,7 @@ body {
   justify-content: center;
   gap: 20px;
   height: 100vh;
+  background-color: #616163;
 }
 
 img, picture, video, canvas, svg {
@@ -60,6 +61,7 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 400px;
     max-height: 400px;
     align-self: center;
+    border-color: #DAF5FF;
 }
 
 .cell{
@@ -67,7 +69,7 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid black;
+  border: 1px solid #DAF5FF;;
 
 }
 
@@ -83,3 +85,21 @@ h1, h2, h3, h4, h5, h6 {
   color: #D29AA0;
 }
 
+dialog{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+dialog::backdrop{
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter:  blur(5px);
+  -webkit-backdrop-filter:  blur(5px);
+}
+
+.form-container{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
