@@ -167,7 +167,13 @@ const DISPLAY_CONTROLLER = (function () {
             const nameX = PlayerX.value;
             const nameO = PlayerO.value;
 
+            if (nameX === '' || nameO === '') {
+                alert('please insert players names');
+                return
+            }
+
             GAME_CONTROLLER.initializeGame(nameX,nameO);
+                    
 
             dialog.close();
         });
